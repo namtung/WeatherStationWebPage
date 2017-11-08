@@ -1,46 +1,9 @@
 google.load('visualization', '1', {packages:['corechart']});
+
 var markers=[];
 
-function drawChart(jsondata,name, element,color) {
-       var  data = new google.visualization.DataTable();
-       data.addColumn('datetime', 'Time');
-       data.addColumn('number', element);
-       var node = document.createElement('div');
+function myMap() { //Create a google map
 
-           $.each(jsondata, function (i, row) {
-               data.addRow([
-                   (new Date(row.time_stamp)),
-                   parseFloat(row.value)
-               ]);
-           });
-
-           console.log('drawing chart');
-           var chart = new google.visualization.LineChart(node);
-           chart.draw(data, {
-               height: 500,
-               width: 700,
-               interpolateNulls: false,
-               title: name,
-               colors: [color]
-           });
-
-   return node;
-   }
-
-
-function drawTable(name,currenttemp,currenthum,currentpress){
-           var table = "<table id=\"data\"> <tr><th scope=\"row\">Temperature</th>";
-                              table += "<td>" + currenttemp + "o".sup()+ "C"+ "</td></tr>";
-                              table += "<tr><th scope=\"row\">Humidity</th>";
-                              table += "<td>" + currenthum +"%"+ "</td></tr>";
-                              table += "<tr><th scope=\"row\">Pressure</th>";
-                              table += "<td>" + currentpress +" Pa"+ "</td></tr>";
-                              table += "</table>";
-           var htmltable = "<h1>"+name+"</h1><br><h2>" + Date().toString() + "</h2><hr>" + table;
-          return htmltable;
-   }
-
-function myMap() {
      function getData(type){ //request data from Firebase and convert them back to JSON
        var data= $.ajax({
                    url: 'https://fir-test1-ec417.firebaseio.com/'+type+'.json',
@@ -54,6 +17,7 @@ function myMap() {
       var tempdata= getData('temperature'), //Call function to get all data
          humdata= getData('humidity'),
          pressdata=getData('pressure');
+// ------------------------------------------------------------------------
 
       function getLastvalue(jsondata){ //Get the lastest value in JSON
         var i, lastvalue;
@@ -63,9 +27,10 @@ function myMap() {
         return lastvalue;
       }
 
-       var currenttemp=getLastvalue(tempdata), //Call the function to get current data
+       var currenttemp=getLastvalue(tempdata),
           currenthum=getLastvalue(humdata),
           currentpress=getLastvalue(pressdata);
+// -----------------------------------------------------------------------
 
        var locations= [['LeHongPhong WeatherStation',10.763889,106.681975],
                        ['DHSP WeatherStation',10.76,106.68],
@@ -103,6 +68,47 @@ function myMap() {
          markers.push(marker);
        }
      }
+
+
+function drawChart(jsondata, name, element,color) { //Chart drawing function
+       var  data = new google.visualization.DataTable();
+       data.addColumn('datetime', 'Time');
+       data.addColumn('number', element);
+       var node = document.createElement('div');
+
+           $.each(jsondata, function (i, row) {
+               data.addRow([
+                   (new Date(row.time_stamp)),
+                   parseFloat(row.value)
+               ]);
+           });
+
+           console.log('drawing chart');
+           var chart = new google.visualization.LineChart(node);
+           chart.draw(data, {
+               height: 500,
+               width: 700,
+               interpolateNulls: false,
+               title: name,
+               colors: [color]
+           });
+   return node;
+   }
+
+
+function drawTable(name,currenttemp,currenthum,currentpress){ //Table drawing function
+           var table = "<table id=\"data\"> <tr><th scope=\"row\">Temperature</th>";
+                              table += "<td>" + currenttemp + "o".sup()+ "C"+ "</td></tr>";
+                              table += "<tr><th scope=\"row\">Humidity</th>";
+                              table += "<td>" + currenthum +"%"+ "</td></tr>";
+                              table += "<tr><th scope=\"row\">Pressure</th>";
+                              table += "<td>" + currentpress +" Pa"+ "</td></tr>";
+                              table += "</table>";
+           var htmltable = "<h1>"+name+"</h1><br><h2>" + Date().toString() + "</h2><hr>" + table;
+          return htmltable;
+   }
+
+
 function demo(id) {
      google.maps.event.trigger(markers[id], 'click');
  }
