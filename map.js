@@ -1,5 +1,7 @@
+google.load('visualization', '1', {packages:['corechart']});
+var markers=[];
 
-   function drawChart(jsondata,name, element,color) {
+function drawChart(jsondata,name, element,color) {
        var  data = new google.visualization.DataTable();
        data.addColumn('datetime', 'Time');
        data.addColumn('number', element);
@@ -26,8 +28,7 @@
    }
 
 
-   function drawTable(name,currenttemp,currenthum,currentpress){
-
+function drawTable(name,currenttemp,currenthum,currentpress){
            var table = "<table id=\"data\"> <tr><th scope=\"row\">Temperature</th>";
                               table += "<td>" + currenttemp + "o".sup()+ "C"+ "</td></tr>";
                               table += "<tr><th scope=\"row\">Humidity</th>";
@@ -35,15 +36,11 @@
                               table += "<tr><th scope=\"row\">Pressure</th>";
                               table += "<td>" + currentpress +" Pa"+ "</td></tr>";
                               table += "</table>";
-            var htmltable = "<h1>"+name+"</h1><br><h2>" + Date().toString() + "</h2><hr>" + table;
-            return htmltable;
-
+           var htmltable = "<h1>"+name+"</h1><br><h2>" + Date().toString() + "</h2><hr>" + table;
+          return htmltable;
    }
 
-   google.load('visualization', '1', {packages:['corechart']});
-   var markers=[];
-
-   function myMap() {
+function myMap() {
      function getData(type){ //request data from Firebase and convert them back to JSON
        var data= $.ajax({
                    url: 'https://fir-test1-ec417.firebaseio.com/'+type+'.json',
@@ -54,7 +51,7 @@
        return data
      }
 
-     var tempdata= getData('temperature'), //Call function to get all data
+      var tempdata= getData('temperature'), //Call function to get all data
          humdata= getData('humidity'),
          pressdata=getData('pressure');
 
@@ -66,7 +63,7 @@
         return lastvalue;
       }
 
-      var currenttemp=getLastvalue(tempdata), //Call the function to get current data
+       var currenttemp=getLastvalue(tempdata), //Call the function to get current data
           currenthum=getLastvalue(humdata),
           currentpress=getLastvalue(pressdata);
 
@@ -82,31 +79,30 @@
                 , maxWidth: 1000
             });
 
-        infoBubble.addTab('temp', 'hello');
-        infoBubble.addTab('hum', 'hi');
-        infoBubble.addTab('press', 'hi');
-        infoBubble.addTab('current', 'hi');
+      infoBubble.addTab('temp', 'hello');
+      infoBubble.addTab('hum', 'hi');
+      infoBubble.addTab('press', 'hi');
+      infoBubble.addTab('current', 'hi');
 
-         for (var i= 0; i<locations.length; i++){
-           marker = new google.maps.Marker({
-                 animation:google.maps.Animation.BOUNCE,
-                 position:new google.maps.LatLng(locations[i][1],locations[i][2] ),
-                 map:map
-           });
-           google.maps.event.addListener(marker, 'click', (function (marker,i) {
-             return function(){
-              infoBubble.updateTab(0,'Current Info',drawTable(locations[i][0],currenttemp,currenthum,currentpress));
-              infoBubble.updateTab(1,'Temperature', drawChart(tempdata,locations[i][0],'Temperature','red'));
-              infoBubble.updateTab(2,'Humidity', drawChart(humdata,locations[i][0],'Humidity','orange'));
-              infoBubble.updateTab(3,'Pressure', drawChart(pressdata,locations[i][0],
-                'Pressure','blue'));
-              infoBubble.open(marker.getMap(), marker);
-             }
-           })(marker, i));
-           markers.push(marker);
-         }
-
+       for (var i= 0; i<locations.length; i++){
+         marker = new google.maps.Marker({
+               animation:google.maps.Animation.BOUNCE,
+               position:new google.maps.LatLng(locations[i][1],locations[i][2] ),
+               map:map
+         });
+         google.maps.event.addListener(marker, 'click', (function (marker,i) {
+           return function(){
+            infoBubble.updateTab(0,'Current Info',drawTable(locations[i][0],currenttemp,currenthum,currentpress));
+            infoBubble.updateTab(1,'Temperature', drawChart(tempdata,locations[i][0],'Temperature','red'));
+            infoBubble.updateTab(2,'Humidity', drawChart(humdata,locations[i][0],'Humidity','orange'));
+            infoBubble.updateTab(3,'Pressure', drawChart(pressdata,locations[i][0],
+              'Pressure','blue'));
+            infoBubble.open(marker.getMap(), marker);
+           }
+         })(marker, i));
+         markers.push(marker);
        }
-       function demo(id) {
-           google.maps.event.trigger(markers[id], 'click');
-       }
+     }
+function demo(id) {
+     google.maps.event.trigger(markers[id], 'click');
+ }
