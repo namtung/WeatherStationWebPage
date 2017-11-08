@@ -1,0 +1,50 @@
+h2{
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 13px;
+}
+
+#data{
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+#data td, #data th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#data th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #191970;
+    color: white;
+}
+
+#data tr:hover {background-color: #ddd;}
+#map{
+    width: 70%;
+    height: 100%;
+    float: right;
+    padding: 15px;
+    border: 1px solid #21252b;
+    border: 1px solid #21252b;
+    border-radius: 10px;
+}
+#menu{
+    font-size: 25px;
+    margin-top: 1px;
+    width: 25%;
+    height: 100%;
+    float: left;
+
+}
+h1{
+  padding: 0.5em;
+  color: black;
+  margin: 0;
+  clear: left;
+  text-align: center;
+}
