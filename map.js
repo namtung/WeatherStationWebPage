@@ -6,7 +6,7 @@ function myMap() { //Create a google map
 
      function getData(type){ //request data from Firebase and convert them back to JSON
        var data= $.ajax({
-                   url: 'https://fir-test1-ec417.firebaseio.com/'+type+'.json',
+                   url: 'datalog.php',
                    dataType: "json",
                    async: false
                    }).responseText;
